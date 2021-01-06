@@ -7,13 +7,13 @@
       <a :href="recipe.url">{{ recipe.author }}</a>
     </p>
 
-    <p>{{ recipe.prepTime }}</p>
+    <p><span v-t="'prepTime'"></span> {{ recipe.prepTime }}</p>
 
-    <p>{{ recipe.cookTime }}</p>
+    <p><span v-t="'cookTime'"></span> {{ recipe.cookTime }}</p>
 
-    <p>{{ recipe.totalTime }}</p>
+    <p><span v-t="'totalTime'"></span> {{ recipe.totalTime }}</p>
 
-    <p>yield: {{ recipe.recipeYield }}</p>
+    <p><span v-t="'recipeYield'"></span> {{ recipe.recipeYield }}</p>
 
     <ul>
       <li v-for="(ingredient, index) in recipe.recipeIngredient" :key="index">
@@ -29,32 +29,18 @@
 
 <script>
 import moment from "moment";
+import i18n from "@/plugins/i18n";
 
-const locales = {
-  en: {
-    h: "h",
-    m: "min"
-  },
-  fr: {
-    h: "h",
-    m: "min"
-  },
-  de: {
-    h: "Std.",
-    m: "Min."
-  }
-};
-
-function formatDuration(iso8601Duration, lang = "en") {
+function formatDuration(iso8601Duration) {
   const duration = moment.duration(iso8601Duration);
   const hours = duration.hours();
   const minutes = duration.minutes();
   let out = "";
   if (hours > 0) {
-    out += `${hours} ${locales[lang].h} `;
+    out += `${hours} ${i18n.global.t("h")} `;
   }
   if (minutes > 0) {
-    out += `${minutes} ${locales[lang].m}`;
+    out += `${minutes} ${i18n.global.t("min")}`;
   }
   return out;
 }
