@@ -1,8 +1,15 @@
 {
     "@context": "http://schema.org",
     "@type": "Recipe",
-    "author": "Migros-Genossenschafts-Bund",
+    "author": {
+        "@type": "Organization",
+        "name": "Migros-Genossenschafts-Bund"
+    },
+    "url": "https://migusto.migros.ch/fr/recettes/boeuf-wellington",
+    "prepTime": "PT30M",
+    "cookTime": "PT35M",
     "totalTime": "PT2H35M",
+    "inLanguage": "fr",
     "datePublished": "2020-09-04",
     "description": "Sous une croûte dorée, un tendre filet de bœuf enrobé d’une farce aux champignons. C’est raffiné, goûteux, ne vous laissez pas intimider, cuisinez festif!",
     "aggregateRating": {

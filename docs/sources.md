@@ -10,10 +10,20 @@ json-ld render
 
 editors easy text, some autocomplete?
 
+https://search.google.com/test/rich-results
+
+HowToSection?
+tool?
+author_> person or org
+notes
+translation
+fork
 
 collections
 
 ISO 8601
+
+detect ingredients foreach step
 
 categories, tags,... check schema/nextcloud
 https://schema.org/Recipe
