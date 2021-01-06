@@ -1,0 +1,2 @@
+recipe-scrapers==12.0.1
+simplejson==3.17.2
