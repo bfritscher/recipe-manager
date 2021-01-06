@@ -1,0 +1,61 @@
+{
+    "@context": "http://schema.org",
+    "@type": "Recipe",
+    "author": "Migros-Genossenschafts-Bund",
+    "totalTime": "PT2H35M",
+    "datePublished": "2020-09-04",
+    "description": "Sous une croûte dorée, un tendre filet de bœuf enrobé d’une farce aux champignons. C’est raffiné, goûteux, ne vous laissez pas intimider, cuisinez festif!",
+    "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "5",
+        "reviewCount": "1"
+    },
+    "name": "Bœuf Wellington",
+    "image": [
+        "https://recipeimages.migros.ch/crop/v-w-330-h-185-a-center_center/4266f50c348eaef36f6e4548efe10180fce8dfee/boeuf-wellington-0-16-9.jpg",
+        "https://recipeimages.migros.ch/crop/v-w-330-h-247-a-center_center/3561967e055b9a282e73bfc063118ec5b2b0de2c/boeuf-wellington-0-4-3.jpg",
+        "https://recipeimages.migros.ch/crop/v-w-330-h-330-a-center_center/7ffdd4e25f9a1829bd8892eedcf6375b1166f816/boeuf-wellington-0-1-1.jpg"
+    ],
+    "recipeYield": "Pour 4 personnes",
+    "recipeCategory": "Plat principal",
+    "recipeCuisine": "Suisse",
+    "keywords": "En famille",
+    "nutrition": {
+        "@type": "NutritionInformation",
+        "calories": "870 kcal",
+        "fatContent": "47 g",
+        "fiberContent": "37 g",
+        "proteinContent": "71 g"
+    },
+    "recipeIngredient": [
+        "1 filet de bœuf de 800-900 g",
+        "sel",
+        "poivre",
+        "2 cs d’huile de colza HOLL",
+        "1 abaisse rectangulaire de pâte feuilletée de 320 g",
+        "150 g de jambon fumé de campagne",
+        "1 œuf"
+    ],
+    "recipeInstructions": [
+        {
+            "@type": "HowToStep",
+            "text": "Assaisonner le filet de sel et de poivre. Chauffer l'huile dans une poêle et saisir le filet de toutes parts. Le déposer ensuite sur une grille et le laisser refroidir. Mettre la poêle de côté."
+        },
+        {
+            "@type": "HowToStep",
+            "text": "Pour la farce, faire tremper les morilles dans de l'eau tiède. Émincer les échalotes, hacher très finement les champignons de Paris et couper fin le persil. Retirer les morilles de l'eau, les essorer en pressant puis les tailler finement. Chauffer l'huile dans la poêle réservée et faire suer les échalotes. Ajouter les champignons de Paris ainsi que les morilles et faire cuire jusqu'à réduction complète du liquide. Incorporer le persil. Laisser refroidir puis ajouter la chair à saucisse, l'œuf et le cognac, bien mélanger. Relever la farce de sel, de poivre et de paprika."
+        },
+        {
+            "@type": "HowToStep",
+            "text": "Dérouler l'abaisse. Couper un ruban d'env. 5 cm de large sur l'un des côtés courts de la pâte. Y découper des formes à l'emporte-pièce pour la décoration ou le tailler en lanières et réserver au réfrigérateur. Disposer les tranches de jambon fumé au centre de l'abaisse en les faisant se chevaucher légèrement sur toute la longueur. Y étaler un peu de farce. Poser le filet sur un côté court de la pâte et le garnir du reste de farce."
+        },
+        {
+            "@type": "HowToStep",
+            "text": "Badigeonner les bords de la pâte d'un peu de jaune d'œuf. Rouler fermement le filet dans la pâte et sceller les extrémités. Déposer le filet enrobé de pâte, ligne de fermeture vers le bas, sur une plaque chemisée de papier sulfurisé. Le badigeonner entièrement de jaune d’œuf puis le décorer avec les formes ou les lanières de pâte réservées. Également badigeonner celles-ci de jaune d'œuf. Mettre env. 30 min au réfrigérateur. Préchauffer le four à 200 °C."
+        },
+        {
+            "@type": "HowToStep",
+            "text": "Piquer le thermomètre à viande à l'endroit le plus épais du filet. Glisser au milieu du four et faire cuire 30-35 min. Lorsque la température à cœur atteint 50-55 °C, le filet est cuit. Le sortir du four et laisser reposer env. 5 min. Le trancher et dresser. Se sert idéalement avec des légumes."
+        }
+    ]
+}
