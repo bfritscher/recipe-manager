@@ -48,3 +48,11 @@ https://github.com/hhursev/recipe-scrapers
 
 https://recipesage.com/
 
+
+Bookmarklet
+try get of url if fail try post
+fetch('https://us-central1-my-food-tracker-001.cloudfunctions.net/scrape_recipe', {method: 'POST', mode:'cors', body: document.documentElement.outerHTML}).then(r => r.text()).then(console.log)
+
+then save result?
+add url domain to images
+download images?
