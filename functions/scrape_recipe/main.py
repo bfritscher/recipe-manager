@@ -1,6 +1,7 @@
 from importlib.metadata import version
 from recipe_scrapers import scrape_me
 from flask.json import dumps
+import io
 
 def scrape_recipe(request):
     # Set CORS headers for the preflight request
@@ -16,14 +17,25 @@ def scrape_recipe(request):
 
         return ('', 204, headers)
 
+
     # Set CORS headers for the main request
     headers = {
         'Access-Control-Allow-Origin': '*'
     }
 
-    if 'url' in request.args:
+    url = None
+
+    if request.method == 'POST':
+        url = io.BytesIO(request.data)
+        url_is_data = True
+
+    if request.method == 'GET' and 'url' in request.args:
+        url = request.args['url']
+        url_is_data = False
+
+    if url:
         try:
-            scraper = scrape_me(request.args['url'], wild_mode=True)
+            scraper = scrape_me(url, wild_mode=True, test=url_is_data)
             return (dumps(scraper.schema.data, ensure_ascii=False, indent=4 * ' '), 200, headers)
         except Exception as e:
             return (str(e), 500, headers)
