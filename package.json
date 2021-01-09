@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "ingreedyjs": "github:bfritscher/ingreedy-js",
     "moment": "^2.29.1",
     "vue": "^3.0.0",
     "vue-i18n": "^9.0.0-rc.1",

@@ -15,6 +15,10 @@ cs= cuillère à soupe
 c.s
 
 bouquet
+brins
+
+remove stop words
+de
 
 pc= pointe de couteau ou pièce
 qsp= quantité suffisante pour

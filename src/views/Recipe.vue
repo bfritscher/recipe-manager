@@ -1,34 +1,61 @@
 <template>
   <div class="recipe">
     <h1>{{ recipe.name }}</h1>
+    <h1><input type="text" v-model="raw_recipe.name"></h1>
     <p class="recipe-description">{{ recipe.description }}</p>
+    <textarea v-model="raw_recipe.description"></textarea>
+    TODO image upload or link?
     <p><img v-if="recipe.image" :src="recipe.image[0]" /></p>
     <p>
       <a :href="recipe.url">{{ recipe.author }}</a>
+      <input type="text" v-model="raw_recipe.url">
+      <input type="text" v-model="raw_recipe.author"> TODO fix author
     </p>
 
+    TODO edit time component
+    TODO add/remove times if 0?
     <p><span v-t="'prepTime'"></span> {{ recipe.prepTime }}</p>
 
     <p><span v-t="'cookTime'"></span> {{ recipe.cookTime }}</p>
 
     <p><span v-t="'totalTime'"></span> {{ recipe.totalTime }}</p>
 
-    <p><span v-t="'recipeYield'"></span> {{ recipe.recipeYield }}</p>
-
-    <ul>
-      <li v-for="(ingredient, index) in recipe.recipeIngredient" :key="index">
-        {{ ingredient }}
-      </li>
-    </ul>
-
-    <p v-for="(step, index) in recipe.recipeInstructions" :key="`step${index}`">
-      {{ step.text }}
+    <p>
+      <span v-t="'recipeYield'"></span>
+      <input type="number" v-model.number="currentYield" min="1" />
+      <input type="text" v-model="raw_recipe.recipeYield" />
     </p>
+
+    <table>
+      <tr v-for="(ingredient, index) in recipe.recipeIngredient" :key="index">
+        <td>
+          <span class="amount">{{ adjustedAmount(ingredient.amount) }}</span>&nbsp;
+          <span class="unit">{{ ingredient.unit }}</span>
+        </td>
+        <td>
+          <span class="ingredient">{{ ingredient.ingredient }}</span>
+        </td>
+      </tr>
+    </table>
+
+    <textarea v-model.lazy="recipeIngredientEdit"></textarea>
+
+    <ol>
+      <li
+        v-for="(step, index) in recipe.recipeInstructions"
+        :key="`step${index}`"
+        v-html="step.text"
+        @click.capture="handleInstruction($event)"
+      ></li>
+    </ol>
+
+    <textarea v-model.lazy="recipeInstructionsEdit"></textarea>
   </div>
 </template>
 
 <script>
 import moment from "moment";
+import Ingreedy from "ingreedyjs";
 import i18n from "@/plugins/i18n";
 
 function formatDuration(iso8601Duration) {
@@ -49,10 +76,42 @@ export default {
   name: "Recipe",
   data() {
     return {
-      raw_recipe: {}
+      raw_recipe: {},
+      currentYield: 0
     };
   },
   computed: {
+    recipeIngredientEdit: {
+      get() {
+        return this.raw_recipe.recipeIngredient
+          ? this.raw_recipe.recipeIngredient.join("\n")
+          : "";
+      },
+      set(text) {
+        this.raw_recipe.recipeIngredient = text.split("\n");
+      }
+    },
+    // TODO suport sections?
+    recipeInstructionsEdit: {
+      get() {
+        return this.raw_recipe.recipeInstructions
+          ? this.raw_recipe.recipeInstructions
+              .map(step => step.text)
+              .join("\n\n")
+          : "";
+      },
+      set(text) {
+        this.raw_recipe.recipeInstructions = text
+          .split("\n\n")
+          .filter(text => text.trim())
+          .map(text => {
+            return {
+              "@type": "HowToStep",
+              text: text.trim()
+            };
+          });
+      }
+    },
     recipe() {
       // format Recipe Schema Object for display
       const recipe = Object.assign({}, this.raw_recipe);
@@ -93,11 +152,57 @@ export default {
 
       // TODO: keep track of cooking multiple sessions?
       /// recipeIngredient extract qty and units?;
+      if (recipe.recipeIngredient) {
+        recipe.recipeIngredient = recipe.recipeIngredient.map(ingredient => {
+          // TODO: use multiply like ingreedy-py?
+          return Ingreedy.parse(ingredient.replace(/½/g, "0.5"));
+        });
+      }
 
       // TODO: sections?
       // recipeInstructions extract ingredients and timer used in each step;
+      // TODO: ingredidents order? ingredients not in list, ingredients not used
+      // TODO: verbes action? glossary link
+      if (recipe.recipeInstructions) {
+        recipe.recipeInstructions = recipe.recipeInstructions.map(step => {
+          const copy = Object.assign({}, step);
+          // nl2br
+          copy.text = step.text.replace(/\n/g, "<br>");
+          // timer
+          // TODO detect verb before or after
+          copy.text = copy.text.replace(
+            /([\d-]+ min)/g,
+            '<span class="timer">$1</span>'
+          );
+          copy.text = copy.text.replace(
+            /([\d-]+ °C)/g,
+            '<span class="temp">$1</span>'
+          );
+          return copy;
+        });
+      }
 
       return recipe;
+    }
+  },
+  methods: {
+    handleInstruction(event) {
+      if (event.target.classList.contains("timer")) {
+        console.log("create timer");
+      }
+    },
+    adjustedAmount(value) {
+      if (value && !isNaN(value)) {
+        return (
+          (parseFloat(value) / this.recipe.recipeYield) * this.currentYield
+        );
+      }
+      return value;
+    }
+  },
+  watch: {
+    "recipe.recipeYield"(value) {
+      this.currentYield = value;
     }
   },
   mounted() {
@@ -124,5 +229,25 @@ h1 {
   font-family: "Lora", serif;
   font-weight: 400;
   font-style: italic;
+}
+
+textarea {
+  width: 100%;
+  min-height: 300px;
+  font-family: "Mulish", sans-serif;
+}
+
+.amount,
+.unit {
+  font-weight: 800;
+}
+.ingredient {
+}
+
+.timer {
+  color: red;
+}
+.temp {
+  color: blue;
 }
 </style>
