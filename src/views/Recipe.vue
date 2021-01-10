@@ -22,6 +22,8 @@
 
     <p>
       <span v-t="'recipeYield'"></span>
+      <button @click="currentYield--" :disabled="currentYield===1">-</button>
+      <button @click="currentYield++">+</button>
       <input type="number" v-model.number="currentYield" min="1" />
       <input type="text" v-model="raw_recipe.recipeYield" />
     </p>
@@ -29,7 +31,7 @@
     <table>
       <tr v-for="(ingredient, index) in recipe.recipeIngredient" :key="index">
         <td>
-          <span class="amount">{{ adjustedAmount(ingredient.amount) }}</span>&nbsp;
+          <span class="amount">{{ numberToFraction( adjustedAmount(ingredient.amount) ) }}</span>&nbsp;
           <span class="unit">{{ ingredient.unit }}</span>
         </td>
         <td>
@@ -196,6 +198,18 @@ export default {
         return (
           (parseFloat(value) / this.recipe.recipeYield) * this.currentYield
         );
+      }
+      return value;
+    },
+    numberToFraction(value) {
+      if (value == 0.25) {
+        return "¼";
+      }
+      if (value == 0.5) {
+        return "½";
+      }
+      if (value == 0.75) {
+        return "¾";
       }
       return value;
     }
