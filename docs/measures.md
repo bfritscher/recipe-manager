@@ -1,3 +1,33 @@
+missing
+
+Stck
+Stange
+cm
+Zwg
+Fl
+Bnd
+Lt
+Br
+Zehe
+Zehen
+B
+PK
+Pk
+Pck
+Do
+Dose
+
+replace , with .
+‘
+300 g Reh-, Hirsch– oder Gämsfleisch
+
+fix 4-5
+
+
+#### Mousse
+
+
+
 https://github.com/openculinary/ingreedy-py
 
 https://github.com/cookspace/ingreedy-js
