@@ -1,5 +1,8 @@
 <template>
   <div class="recipe">
+    <router-link :to="{ name: 'RecipeEdit', params: { id: recipe._id } }"
+      >Edit</router-link
+    >
     <h1>{{ recipe.name }}</h1>
     <p class="recipe-description">{{ recipe.description }}</p>
     <p><img v-if="recipe.image" :src="recipe.image[0]" /></p>
@@ -19,6 +22,7 @@
       <button @click="currentYield--" :disabled="currentYield === 1">-</button>
       <button @click="currentYield++">+</button>
       <input type="number" v-model.number="currentYield" min="1" />
+      TODO: save custom yield?
     </p>
 
     <table>
@@ -70,14 +74,16 @@ export default {
   name: "Recipe",
   data() {
     return {
-      raw_recipe: {},
       currentYield: 0
     };
+  },
+  mounted() {
+    this.$store.dispatch("loadRecipe", this.$route.params.id);
   },
   computed: {
     recipe() {
       // format Recipe Schema Object for display
-      const recipe = Object.assign({}, this.raw_recipe);
+      const recipe = Object.assign({}, this.$store.state.recipe);
 
       // author object (Person or Organization) or text
       if (recipe.author && recipe.author.name) {
@@ -176,14 +182,15 @@ export default {
     }
   },
   watch: {
-    "recipe.recipeYield"(value) {
-      this.currentYield = value;
+    "recipe.recipeYield": {
+      handler(value) {
+        this.currentYield = value;
+      },
+      immediate: true
+    },
+    $route() {
+      this.$store.dispatch("loadRecipe", this.$route.params.id);
     }
-  },
-  mounted() {
-    fetch("/test.json")
-      .then(r => r.json())
-      .then(r => (this.raw_recipe = r));
   }
 };
 </script>
