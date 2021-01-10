@@ -55,6 +55,7 @@
 import moment from "moment";
 import Ingreedy from "ingreedyjs";
 import i18n from "@/plugins/i18n";
+import * as Sentry from "@sentry/browser";
 
 function formatDuration(iso8601Duration) {
   const duration = moment.duration(iso8601Duration);
@@ -124,7 +125,14 @@ export default {
       if (recipe.recipeIngredient) {
         recipe.recipeIngredient = recipe.recipeIngredient.map(ingredient => {
           // TODO: use multiply like ingreedy-py?
-          return Ingreedy.parse(ingredient.replace(/½/g, "0.5"));
+          try {
+            return Ingreedy.parse(ingredient.replace(/½/g, "0.5"));
+          } catch (err) {
+            Sentry.captureException(err);
+            return {
+              ingredient: ingredient
+            }
+          }
         });
       }
 
@@ -140,12 +148,16 @@ export default {
           // timer
           // TODO detect verb before or after
           copy.text = copy.text.replace(
-            /([\d-]+ min)/g,
+            /([\d-]+ ?min)/g,
             '<span class="timer">$1</span>'
           );
           copy.text = copy.text.replace(
-            /([\d-]+ °C)/g,
+            /([\d-]+ ?°C)/g,
             '<span class="temp">$1</span>'
+          );
+          copy.text = copy.text.replace(
+            /([\d-]+ ?cm)/g,
+            '<span class="size">$1</span>'
           );
           return copy;
         });
@@ -231,5 +243,8 @@ textarea {
 }
 .temp {
   color: blue;
+}
+.size {
+  color: orange;
 }
 </style>
