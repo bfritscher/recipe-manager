@@ -1,19 +1,13 @@
 <template>
   <div class="recipe">
     <h1>{{ recipe.name }}</h1>
-    <h1><input type="text" v-model="raw_recipe.name"></h1>
     <p class="recipe-description">{{ recipe.description }}</p>
-    <textarea v-model="raw_recipe.description"></textarea>
-    TODO image upload or link?
     <p><img v-if="recipe.image" :src="recipe.image[0]" /></p>
     <p>
       <a :href="recipe.url">{{ recipe.author }}</a>
-      <input type="text" v-model="raw_recipe.url">
-      <input type="text" v-model="raw_recipe.author"> TODO fix author
     </p>
 
-    TODO edit time component
-    TODO add/remove times if 0?
+    TODO edit time component TODO add/remove times if 0?
     <p><span v-t="'prepTime'"></span> {{ recipe.prepTime }}</p>
 
     <p><span v-t="'cookTime'"></span> {{ recipe.cookTime }}</p>
@@ -22,16 +16,18 @@
 
     <p>
       <span v-t="'recipeYield'"></span>
-      <button @click="currentYield--" :disabled="currentYield===1">-</button>
+      <button @click="currentYield--" :disabled="currentYield === 1">-</button>
       <button @click="currentYield++">+</button>
       <input type="number" v-model.number="currentYield" min="1" />
-      <input type="text" v-model="raw_recipe.recipeYield" />
     </p>
 
     <table>
       <tr v-for="(ingredient, index) in recipe.recipeIngredient" :key="index">
         <td>
-          <span class="amount">{{ numberToFraction( adjustedAmount(ingredient.amount) ) }}</span>&nbsp;
+          <span class="amount">{{
+            numberToFraction(adjustedAmount(ingredient.amount))
+          }}</span
+          >&nbsp;
           <span class="unit">{{ ingredient.unit }}</span>
         </td>
         <td>
@@ -39,8 +35,6 @@
         </td>
       </tr>
     </table>
-
-    <textarea v-model.lazy="recipeIngredientEdit"></textarea>
 
     <ol>
       <li
@@ -50,8 +44,6 @@
         @click.capture="handleInstruction($event)"
       ></li>
     </ol>
-
-    <textarea v-model.lazy="recipeInstructionsEdit"></textarea>
   </div>
 </template>
 
@@ -83,37 +75,6 @@ export default {
     };
   },
   computed: {
-    recipeIngredientEdit: {
-      get() {
-        return this.raw_recipe.recipeIngredient
-          ? this.raw_recipe.recipeIngredient.join("\n")
-          : "";
-      },
-      set(text) {
-        this.raw_recipe.recipeIngredient = text.split("\n");
-      }
-    },
-    // TODO suport sections?
-    recipeInstructionsEdit: {
-      get() {
-        return this.raw_recipe.recipeInstructions
-          ? this.raw_recipe.recipeInstructions
-              .map(step => step.text)
-              .join("\n\n")
-          : "";
-      },
-      set(text) {
-        this.raw_recipe.recipeInstructions = text
-          .split("\n\n")
-          .filter(text => text.trim())
-          .map(text => {
-            return {
-              "@type": "HowToStep",
-              text: text.trim()
-            };
-          });
-      }
-    },
     recipe() {
       // format Recipe Schema Object for display
       const recipe = Object.assign({}, this.raw_recipe);

@@ -11,10 +11,10 @@ Sentry.init({
       tracing: true,
       logErrors: true
     }),
-    new Integrations.BrowserTracing(),
+    new Integrations.BrowserTracing()
   ],
   tracingOptions: {
-    trackComponents: true,
+    trackComponents: true
   },
   // We recommend adjusting this value in production, or using tracesSampler
   // for finer control
