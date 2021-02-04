@@ -27,14 +27,17 @@
 
     <table>
       <tr v-for="(ingredient, index) in recipe.recipeIngredient" :key="index">
-        <td>
+        <td colspan="2" v-if="ingredient.ingredient.startsWith('#')">
+          <h3>{{ ingredient.ingredient.replace(/#/g, "") }}</h3>
+        </td>
+        <td v-if="!ingredient.ingredient.startsWith('#')">
           <span class="amount">{{
             numberToFraction(adjustedAmount(ingredient.amount))
           }}</span
           >&nbsp;
           <span class="unit">{{ ingredient.unit }}</span>
         </td>
-        <td>
+        <td v-if="!ingredient.ingredient.startsWith('#')">
           <span class="ingredient">{{ ingredient.ingredient }}</span>
         </td>
       </tr>
@@ -75,7 +78,7 @@ export default {
   name: "Recipe",
   data() {
     return {
-      currentYield: 0
+      currentYield: 0,
     };
   },
   mounted() {
@@ -91,7 +94,7 @@ export default {
         recipe.author = recipe.author.name;
       }
 
-      ["prepTime", "cookTime", "totalTime"].forEach(time => {
+      ["prepTime", "cookTime", "totalTime"].forEach((time) => {
         if (Object.prototype.hasOwnProperty.call(recipe, time)) {
           recipe[time] = formatDuration(recipe[time]);
         }
@@ -123,15 +126,17 @@ export default {
       // TODO: keep track of cooking multiple sessions?
       /// recipeIngredient extract qty and units?;
       if (recipe.recipeIngredient) {
-        recipe.recipeIngredient = recipe.recipeIngredient.map(ingredient => {
+        recipe.recipeIngredient = recipe.recipeIngredient.map((ingredient) => {
           // TODO: use multiply like ingreedy-py?
           try {
             return Ingreedy.parse(ingredient.replace(/½/g, "0.5"));
           } catch (err) {
-            Sentry.captureException(err);
-            return {
-              ingredient: ingredient
+            if (Sentry) {
+              Sentry.captureException(err);
             }
+            return {
+              ingredient: ingredient,
+            };
           }
         });
       }
@@ -141,18 +146,18 @@ export default {
       // TODO: ingredidents order? ingredients not in list, ingredients not used
       // TODO: verbes action? glossary link
       if (recipe.recipeInstructions) {
-        recipe.recipeInstructions = recipe.recipeInstructions.map(step => {
+        recipe.recipeInstructions = recipe.recipeInstructions.map((step) => {
           const copy = Object.assign({}, step);
           // nl2br
           copy.text = step.text.replace(/\n/g, "<br>");
           // timer
           // TODO detect verb before or after
           copy.text = copy.text.replace(
-            /([\d-]+ ?min)/g,
+            /([\d-]+ ?min)/gi,
             '<span class="timer">$1</span>'
           );
           copy.text = copy.text.replace(
-            /([\d-]+ ?°C)/g,
+            /([\d-]+ ?°C)/gi,
             '<span class="temp">$1</span>'
           );
           copy.text = copy.text.replace(
@@ -164,7 +169,7 @@ export default {
       }
 
       return recipe;
-    }
+    },
   },
   methods: {
     handleInstruction(event) {
@@ -181,29 +186,35 @@ export default {
       return value;
     },
     numberToFraction(value) {
-      if (value == 0.25) {
+      if (value === 0.25) {
         return "¼";
       }
-      if (value == 0.5) {
+      if (value === 1 / 3) {
+        return "⅓";
+      }
+      if (value === 0.5) {
         return "½";
       }
-      if (value == 0.75) {
+      if (value === 2 / 3) {
+        return "⅔";
+      }
+      if (value === 0.75) {
         return "¾";
       }
       return value;
-    }
+    },
   },
   watch: {
     "recipe.recipeYield": {
       handler(value) {
         this.currentYield = value;
       },
-      immediate: true
+      immediate: true,
     },
     $route() {
       this.$store.dispatch("loadRecipe", this.$route.params.id);
-    }
-  }
+    },
+  },
 };
 </script>
 

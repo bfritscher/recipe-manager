@@ -20,9 +20,15 @@ Dose
 replace , with .
 ‘
 300 g Reh-, Hirsch– oder Gämsfleisch
+1 	,5 kg Lammgigot
 
 fix 4-5
 
+## parsing
+
+ 2 Stunden bei 30 Grad
+
+ double space to single?
 
 #### Mousse
 

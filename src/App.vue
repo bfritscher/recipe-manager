@@ -12,5 +12,18 @@
   </div>
   <router-view />
 </template>
+<script>
+/*
+const recipes = require('../public/recipes.json');
 
+export default {
+  async mounted() {
+    for(let i=0; i< recipes.length; i++) {
+      console.log(recipes[i])
+      await this.$store.dispatch("createRecipe", recipes[i])
+    }
+  }
+}
+*/
+</script>
 <style></style>
